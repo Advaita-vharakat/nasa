@@ -1,0 +1,28 @@
+{
+  "name": "nasa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Advaita-vharakat/nasa.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Advaita-vharakat/nasa/issues"
+  },
+  "homepage": "https://github.com/Advaita-vharakat/nasa#readme",
+  "dependencies": {
+    "@google/genai": "^1.22.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "node": "^24.9.0",
+    "node-fetch": "^2.7.0"
+  }
+}
