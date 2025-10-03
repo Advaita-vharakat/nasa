@@ -12,6 +12,7 @@ const images = [
 ];
 
 
+
 router.get("/fact", async (req, res) => {
   try {
     const randomSeed = Math.floor(Math.random() * 1000);
@@ -47,5 +48,7 @@ router.get("/fact", async (req, res) => {
     res.status(500).json({ fact: "Error generating fact", image_url: "" });
   }
 });
+
+
 
 module.exports = router;

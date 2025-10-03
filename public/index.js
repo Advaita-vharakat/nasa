@@ -5,15 +5,20 @@ const mainContent = document.getElementById('main-content');
 const logoExpanded = document.getElementById('logo-expanded');
 const logoCollapsed = document.getElementById('logo-collapsed');
 let isSidebarOpen = window.innerWidth >= 1024; // desktop starts open
+const navbar = document.getElementById("navbar");
+let loggedIn = false; // initial state
+
+const authButton = document.getElementById('auth-button');
+
+
 
 const navItems = [
-    ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home'],
-    ['M19 19V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14l5-2 5 2 5-2 5 2z', 'chat'],
-    ['M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', 'Draft idea'],
-    ['M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z', 'your work'],
-    ['M12 20a8 8 0 100-16 8 8 0 000 16zM12 12V6', 'Visualizations'],
-    ['M6 4v16M18 4v16M6 8h12M6 16h12', 'storyline'],
-
+  ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/'],
+  ['M19 19V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14l5-2 5 2 5-2 5 2z', 'Chat', '/chat/get'],
+  ['M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', 'Draft idea', '/draft'],
+  ['M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z', 'Your work', '/work'],
+  ['M12 20a8 8 0 100-16 8 8 0 000 16zM12 12V6', 'Visualizations', '/graph/get'],
+  ['M6 4v16M18 4v16M6 8h12M6 16h12', 'Storyline', '/storyline'],
 ];
 
 
@@ -106,9 +111,9 @@ function generateNavigationLinks() {
     const navContainer = document.getElementById('nav-links');
     navContainer.innerHTML = '';
 
-    navItems.forEach(([path, name]) => {
+    navItems.forEach(([path, name, url]) => {
         const item = document.createElement('a');
-        item.href = '#';
+        item.href = url; 
         item.className = 'nav-item flex items-center h-12 py-2 px-3 lg:px-6 text-white hover:bg-blue-600/30 transition duration-150 ease-in-out cursor-pointer rounded-r-full group';
 
         const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -135,6 +140,7 @@ function generateNavigationLinks() {
     });
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
     generateNavigationLinks();
 
@@ -156,3 +162,32 @@ window.addEventListener('resize', () => {
         updateSidebarState(true); // force expand on desktop
     }
 });
+
+function updateAuthButton() {
+    if (loggedIn) {
+        authButton.textContent = 'Logout';
+        authButton.classList.remove('bg-blue-600');
+        authButton.classList.add('bg-red-600', 'hover:bg-red-500');
+    } else {
+        authButton.textContent = 'Login';
+        authButton.classList.remove('bg-red-600', 'hover:bg-red-500');
+        authButton.classList.add('bg-blue-600', 'hover:bg-blue-500');
+    }
+}
+
+// simulate login/logout action
+authButton.addEventListener('click', () => {
+    loggedIn = !loggedIn;
+    updateAuthButton();
+
+    if (loggedIn) {
+        alert("You are now logged in!");
+        // optionally, show user-specific content or API calls here
+    } else {
+        alert("You are now logged out!");
+        // clear user session, hide content, etc.
+    }
+});
+
+// initialize button state
+updateAuthButton();

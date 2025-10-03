@@ -1,0 +1,173 @@
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            /* Prevent scroll during animation */
+            height: 100vh;
+        }
+
+        /* Custom star background animation */
+        .stars {
+            background: #000 url('https://placehold.co/1x1/000000/000000') repeat;
+            /* Fallback black */
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.8) 1px, transparent 1px),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+                radial-gradient(circle at 40% 50%, rgba(255, 255, 255, 0.4) 1px, transparent 1px),
+                radial-gradient(circle at 90% 10%, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+            background-size: 400px 400px, 300px 300px, 200px 200px, 150px 150px;
+            animation: move-stars 120s linear infinite;
+        }
+
+        @keyframes move-stars {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 400px 400px;
+            }
+        }
+
+        /* Rocket container for positioning and launch animation */
+        #rocket-container {
+            transition: transform 3s cubic-bezier(0.19, 1, 0.22, 1);
+            /* Ease out fast */
+        }
+
+        /* Class added on launch */
+        .launching {
+            transform: translateY(-100vh) scale(0.8);
+            /* Moves up and slightly shrinks */
+        }
+
+        /* Class added during processing/tremor (Email entered) */
+        .tremor {
+            animation: tremor 0.15s infinite alternate;
+        }
+
+        @keyframes tremor {
+            0% {
+                transform: translateX(0px);
+            }
+
+            50% {
+                transform: translateX(-1px);
+            }
+
+            100% {
+                transform: translateX(1px);
+            }
+        }
+
+        /* --- SLEEK ORBITER CAPSULE DESIGN --- */
+        .orbiter-body {
+            width: 70px;
+            /* Width for capsule */
+            height: 140px;
+            /* Height for capsule */
+            background: linear-gradient(to top, #9ca3af, #4b5563);
+            /* Metallic Gray */
+            border-radius: 50px / 70px;
+            /* Capsule shape */
+            position: relative;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            border: 2px solid #374151;
+            overflow: hidden;
+        }
+
+        /* Cockpit/Window detail */
+        .orbiter-body::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 15px;
+            background-color: #0c4a6e;
+            /* Dark blue/window */
+            border-radius: 5px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Thruster Nozzle detail */
+        .orbiter-body::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 15px;
+            background-color: #1f2937;
+            /* Dark nozzle rim */
+            border-radius: 50%;
+            border-top: 3px solid #6b7280;
+        }
+
+
+        /* Flame Effect Container (High-Energy Plasma) */
+        .orbiter-thruster {
+            width: 50px;
+            /* Same width as nozzle */
+            height: 90px;
+            background: #00e5ff;
+            /* Bright Cyan */
+            border-radius: 50%;
+            position: absolute;
+            bottom: -95px;
+            /* Scaled to hang lower */
+            left: 50%;
+            transform: translateX(-50%);
+            /* Smooth transition for flame size and opacity */
+            transition: opacity 0.5s ease-in-out, height 0.5s, box-shadow 0.5s;
+            opacity: 0;
+            /* Hidden by default */
+        }
+
+        /* State 2: Ready/Fueled (Password entered) - Idling Glow */
+        .orbiter-body.fueled+.orbiter-thruster {
+            opacity: 0.8;
+            height: 10px;
+            /* Smallest size for just a glow */
+            background: transparent;
+            /* No visible flame, just glow */
+            box-shadow: 0 0 20px 5px rgba(0, 229, 255, 0.9);
+            /* Intense blue glow */
+            animation: pulse-glow-idle 1.5s infinite alternate;
+        }
+
+        /* State 3: Active/Launch (On submit) - Full power plasma thruster */
+        .orbiter-body.active+.orbiter-thruster {
+            opacity: 1;
+            /* Full visibility */
+            height: 100px;
+            /* Full size blue plasma */
+            background: #00e5ff;
+            /* Bright Cyan */
+            box-shadow: 0 0 80px 30px rgba(0, 229, 255, 1), inset 0 0 25px 10px #ffffff;
+            /* White-hot center */
+            animation: pulse-plasma 0.2s infinite alternate;
+        }
+
+        /* Keyframes for new design */
+        @keyframes pulse-glow-idle {
+            from {
+                opacity: 0.6;
+            }
+
+            to {
+                opacity: 0.9;
+            }
+        }
+
+        @keyframes pulse-plasma {
+            from {
+                height: 90px;
+            }
+
+            to {
+                height: 105px;
+            }
+        }

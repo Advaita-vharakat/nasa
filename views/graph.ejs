@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AstroBio Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/graph.css">
+</head>
+
+<body>
+
+    <!-- Stars Background Overlay -->
+    <div class="star-bg"></div>
+
+    <div id="app" class="flex min-h-screen">
+
+        <!-- Sidebar (unchanged) -->
+        <aside id="sidebar"
+            class="glass-sidebar fixed h-full z-30 transition-all duration-300 w-20 lg:w-64 flex flex-col items-center py-6">
+            <button onclick="toggleSidebar()"
+                class="lg:hidden absolute top-4 right-[-45px] p-2 bg-blue-600 rounded-full shadow-lg z-50">
+                <svg id="toggle-icon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <div class="mb-10 p-2 text-3xl font-bold text-blue-400 opacity-80">
+                <span id="logo-expanded" class="hidden lg:block">Vioma</span>
+                <span id="logo-collapsed" class="block lg:hidden">V</span>
+            </div>
+
+            <nav id="nav-links" class="flex flex-col space-y-4 w-full">
+            </nav>
+
+            <div class="mt-auto pt-6 w-full flex justify-center">
+                <a href="#"
+                    class="nav-item flex items-center h-12 py-2 px-3 lg:px-6 text-white hover:bg-blue-600/30 transition duration-150 ease-in-out cursor-pointer rounded-r-full group">
+                    <svg class="nav-icon w-6 h-6 transition-all duration-300 stroke-2 group-hover:text-blue-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                        </path>
+                    </svg>
+                    <span
+                        class="lg:inline hidden text-sm font-medium whitespace-nowrap opacity-100 transition-opacity duration-300">Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-grow p-8 pt-10 transition-all duration-300 ml-20 lg:ml-64">
+
+            <!-- Header Section -->
+            <header class="text-center mb-16">
+                <h1
+                    class="text-6xl lg:text-8xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-200 mb-4">
+                    Vioma
+                </h1>
+            </header>
+
+            <!-- Graph Dashboard Controls -->
+            <section class="controls flex flex-wrap gap-4 justify-center mb-8">
+                <select id="graph-type" class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white">
+                    <option value="bar">Bar Chart</option>
+                    <option value="line">Line Chart</option>
+                    <option value="pie">Pie Chart</option>
+                </select>
+                <input id="graph-title" placeholder="Graph Title" type="text"
+                    class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white">
+                <button onclick="generateGraph()">Generate Graph</button>
+            </section>
+
+            <!-- Graphs Display Area -->
+            <section id="graphsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Graph canvases will be injected here -->
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- JS -->
+    <script src="/graph.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</body>
+
+</html>

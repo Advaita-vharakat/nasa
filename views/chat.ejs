@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vioma Search</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/chat.css">
+</head>
+
+<body>
+    <!-- Stars Background Overlay -->
+    <div class="star-bg"></div>
+    <!-- Horizon moon -->
+    <div class="planet-bg"></div>
+<div class="planet-glow"></div>
+
+<!-- Planets -->
+<div class="planet earth"></div>
+<div class="planet mars"></div>
+<div class="planet jupiter"></div>
+<div class="planet sun"></div>
+
+
+
+
+    <div id="app" class="flex min-h-screen">
+
+        <!-- Sidebar -->
+        <aside id="sidebar"
+            class="glass-sidebar fixed h-full z-30 transition-all duration-300 w-20 flex flex-col items-center py-6">
+
+            <!-- Toggle Button -->
+            <button onclick="toggleSidebar()"
+                class="absolute top-4 right-[-45px] p-2 bg-blue-600 rounded-full shadow-lg z-50">
+                <svg id="toggle-icon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Logo -->
+            <div class="mb-10 p-2 text-3xl font-bold text-blue-400 opacity-80">
+                <span id="logo-expanded" class="hidden">Vioma</span>
+                <span id="logo-collapsed" class="block">V</span>
+            </div>
+
+            <!-- Navigation -->
+            <nav id="nav-links" class="flex flex-col space-y-4 w-full">
+                <!-- Injected via script.js -->
+            </nav>
+
+            <!-- Footer -->
+            <div class="mt-auto pt-6 w-full flex justify-center">
+                <a href="#"
+                    class="nav-item flex items-center h-12 py-2 px-3 text-white hover:bg-blue-600/30 transition duration-150 ease-in-out cursor-pointer rounded-r-full group">
+                    <svg class="nav-icon w-6 h-6 transition-all duration-300 stroke-2 group-hover:text-blue-300"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+                        </path>
+                    </svg>
+                    <span class="hidden text-sm font-medium whitespace-nowrap">Settings</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main id="main-content" class="flex-grow p-8 pt-10 transition-all duration-300 ml-20">
+
+            <!-- Header -->
+            <header class="text-center mb-16">
+                <h1
+                    class="text-6xl lg:text-8xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-sky-200 mb-2">
+                    Vioma
+                </h1>
+                <p class="text-gray-400 text-lg">Your Gateway to the Universe</p>
+            </header>
+
+            <!-- Search -->
+            <section class="flex flex-col items-center justify-center">
+                <h2 class="text-2xl lg:text-3xl font-light mb-6 text-gray-300 tracking-wider">
+                    Explore Space Knowledge
+                </h2>
+
+                <div class="w-full max-w-4xl relative search-bar-glow rounded-2xl">
+                    <input id="searchInput" type="text" placeholder="e.g., microbial evolution in space..."
+                        class="w-full p-6 text-lg rounded-2xl bg-slate-900/70 border border-blue-600/50 text-white placeholder-gray-500 focus:outline-none focus:border-blue-400 transition duration-300">
+
+                    <button onclick="performSearch()"
+                        class="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 rounded-full bg-blue-600 hover:bg-blue-500 transition duration-150 shadow-lg hover:shadow-blue-500/70">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="results" class="mt-12 max-w-4xl mx-auto space-y-6">
+                <!-- Results injected here -->
+            </section>
+
+        </main>
+    </div>
+
+    <script src="/chat.js"></script>
+</body>
+
+</html>
