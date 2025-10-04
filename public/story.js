@@ -6,6 +6,9 @@ const logoExpanded = document.getElementById('logo-expanded');
 const logoCollapsed = document.getElementById('logo-collapsed');
 let isSidebarOpen = window.innerWidth >= 1024; // desktop starts open
 const navbar = document.getElementById("navbar");
+if (window.top !== window.self) {
+      window.top.location = window.location.href;
+    }
 
 
 const authBtn = document.getElementById('auth-btn');
@@ -42,10 +45,9 @@ window.onload = checkAuth;
 
 
 const navItems = [
-  ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/'],
+  ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/home'],
   ['M19 19V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14l5-2 5 2 5-2 5 2z', 'Chat', '/chat/get'],
   ['M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', 'Draft idea', '/draft'],
-  ['M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z', 'Your work', '/work'],
   ['M12 20a8 8 0 100-16 8 8 0 000 16zM12 12V6', 'Visualizations', '/graph'],
   ['M6 4v16M18 4v16M6 8h12M6 16h12', 'Storyline', '/storyline'],
 ];
@@ -192,13 +194,30 @@ window.addEventListener('resize', () => {
     }
 });
 
+const introVideo = document.getElementById("intro-video");
+const introContainer = document.getElementById("intro-video-container");
+const skipBtn = document.getElementById("skip-btn");
+const mainApp = document.getElementById("main-app");
+
+// When video ends, show main content
+introVideo.onended = () => {
+  introContainer.style.display = "none";
+  mainApp.classList.remove("hidden");
+};
+
+// Skip button logic
+skipBtn.addEventListener("click", () => {
+  introVideo.pause();
+  introContainer.style.display = "none";
+  mainApp.classList.remove("hidden");
+});
 
 
 // ===== Video Gallery =====
 const videos = [
-    { title: 'Microgravity Effects', src: '/videos/video1.mp4', category: 'Biological' },
-    { title: 'Habitat Power Cycle', src: '/videos/video2.mp4', category: 'Engineering' },
-    { title: 'Radiation Shielding', src: '/videos/video3.mp4', category: 'Physics' },
+    { title: 'Radiation Effects', src: '/vid1.mp4', category: 'radiation' },
+    { title: 'Muscle and Bone Density', src: '/vid2.mp4', category: 'Biology' },
+    { title: 'Radiation Shielding', src: '/vid3.mp4', category: 'Physics' },
     // Add more video objects as needed
 ];
 

@@ -1,0 +1,127 @@
+/* static/style.css */
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: #f5f7fb;
+    color: #222;
+}
+
+.container {
+    max-width: 900px;
+    margin: 36px auto;
+    padding: 28px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(20, 20, 40, 0.06);
+}
+
+h1 {
+    text-align: center;
+    margin-top: 0;
+}
+
+form {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 14px;
+    align-items: center;
+}
+
+input[type=file] {
+    padding: 6px;
+}
+
+select {
+    padding: 8px;
+}
+
+button {
+    padding: 8px 14px;
+    background: #0b79ff;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.95;
+}
+
+.muted {
+    color: #666;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.summary-box {
+    background: #f9fafb;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #e6eef8;
+    min-height: 120px;
+}
+
+pre {
+    margin: 0;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+/* Custom Font for a sleek look */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(at 50% 100%, #000028, #000000), 
+                linear-gradient(180deg, #000020 0%, #000010 100%);
+    min-height: 100vh;
+    color: #E0F2FE; 
+    overflow-x: hidden; 
+}
+
+.star-bg {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.7;
+    pointer-events: none;
+    z-index: -1;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+        radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+        radial-gradient(circle at 90% 90%, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
+    background-size: 1000px 1000px;
+}
+
+/* Glassmorphism Sidebar Effect */
+.glass-sidebar {
+    background-color: rgba(14, 25, 64, 0.25); /* Darker blue semi-transparent */
+    backdrop-filter: blur(15px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+#sidebar {
+  transition: width 0.25s ease, z-index 0.2s;
+}
+
+
+
+/* Icon Glow on Hover */
+.nav-item:hover .nav-icon {
+    filter: drop-shadow(0 0 5px #3b82f6); /* Blue glow */
+    transform: scale(1.1);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Search Bar Glow Effect */
+.search-bar-glow:focus-within {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.5); /* ring-blue-500/50 */
+    transition: box-shadow 0.3s ease-in-out;
+}

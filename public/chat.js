@@ -4,11 +4,14 @@ const logoExpanded = document.getElementById('logo-expanded');
 const logoCollapsed = document.getElementById('logo-collapsed');
 let isSidebarOpen = false;
 
+if (window.top !== window.self) {
+      window.top.location = window.location.href;
+    }
+
 const navItems = [
-  ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/'],
+  ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/home'],
   ['M19 19V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14l5-2 5 2 5-2 5 2z', 'Chat', '/chat/get'],
   ['M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', 'Draft idea', '/draft'],
-  ['M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z', 'Your work', '/work'],
   ['M12 20a8 8 0 100-16 8 8 0 000 16zM12 12V6', 'Visualizations', '/graph'],
   ['M6 4v16M18 4v16M6 8h12M6 16h12', 'Storyline', '/storyline'],
 ];
@@ -76,34 +79,63 @@ function generateNavigationLinks() {
   });
 }
 
-// Search Engine Simulation
-function performSearch() {
-  const query = document.getElementById('searchInput').value.trim();
-  const resultsContainer = document.getElementById('results');
-  resultsContainer.innerHTML = '';
 
-  if (!query) {
-    resultsContainer.innerHTML = `<p class="text-gray-400 text-center">Please enter something to search.</p>`;
+  // Init
+  document.addEventListener('DOMContentLoaded', () => {
+    generateNavigationLinks();
+    updateSidebarState(false); // Always start collapsed
+  });
+
+function fetchResults() {
+  const query = document.getElementById('searchInput').value; // match your input id
+  const resultsContainer = document.getElementById('results'); // match HTML section id
+  resultsContainer.innerHTML = ''; // Clear previous results
+
+  if (query.trim() === "") {
+    resultsContainer.innerHTML = '<p class="no-results">Please enter a search term.</p>';
     return;
   }
 
-  // Dummy results for now
-  const dummyResults = [
-    { title: `Exploring ${query}`, desc: `Deep dive into ${query} in space context.` },
-    { title: `${query} - Research Papers`, desc: `Collection of recent publications on ${query}.` },
-    { title: `Visualizing ${query}`, desc: `Interactive models and visualizations related to ${query}.` }
-  ];
+  fetch(`/chat/search?q=${encodeURIComponent(query)}`)
+    .then(response => response.json())
+    .then(data => {
+      if (data.message) {
+        resultsContainer.innerHTML = `<p class="no-results">${data.message}</p>`;
+        return;
+      }
 
-  dummyResults.forEach(r => {
-    const card = document.createElement('div');
-    card.className = 'result-card';
-    card.innerHTML = `<h3 class="text-xl font-bold text-blue-300 mb-2">${r.title}</h3><p class="text-gray-300">${r.desc}</p>`;
-    resultsContainer.appendChild(card);
-  });
+      data.forEach(item => {
+        const card = document.createElement('article');
+        card.classList.add('result-card');
+
+        // Add title, snippet, image or link
+        let mediaContent = '';
+        if (item.imageUrl) {
+          mediaContent = `<a href="${item.url}" target="_blank" class="card-image-link">
+                              <img src="${item.imageUrl}" alt="${item.title}" class="card-image">
+                          </a>`;
+        } else {
+          const linkText = item.source === 'Wikipedia' ? 'View Page' : 'View Asset';
+          mediaContent = `<a href="${item.url}" target="_blank" class="card-link">${linkText} &rarr;</a>`;
+        }
+
+        card.innerHTML = `
+          <div class="card-header">
+            <h2 class="card-title"><a href="${item.url}" target="_blank">${item.title}</a></h2>
+            <span class="card-source">${item.source}</span>
+          </div>
+          <p class="card-snippet">${item.snippet}</p>
+          ${mediaContent}
+        `;
+
+        resultsContainer.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error("Error fetching search results:", err);
+      resultsContainer.innerHTML = `<p class="no-results">Error fetching results.</p>`;
+    });
 }
 
-// Init
-document.addEventListener('DOMContentLoaded', () => {
-  generateNavigationLinks();
-  updateSidebarState(false); // Always start collapsed
-});
+
+

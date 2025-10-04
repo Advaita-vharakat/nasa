@@ -32,7 +32,7 @@ app.use('/user', userRouter);
 
 
 
-app.get("/", (req, res) => {
+app.get("/home", (req, res) => {
   res.render("index");
 });
 
@@ -42,6 +42,10 @@ app.get("/login", (req, res) => {
 
 app.get("/storyline", (req, res) => {
   res.render("story");
+});
+
+app.get("/draft", (req, res) => {
+  res.render("draft");
 });
 
 app.listen(3004, () => {

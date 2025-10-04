@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Summarizer — Fast & Humanized</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+  <!-- Stars Background Overlay -->
+  <div class="star-bg"></div>
+
+  <div id="app" class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+      class="glass-sidebar fixed h-full z-30 transition-all duration-300 w-20 lg:w-64 flex flex-col items-center py-6">
+
+      <button onclick="toggleSidebar()"
+        class="lg:hidden absolute top-4 right-[-45px] p-2 bg-blue-600 rounded-full shadow-lg z-50">
+        <svg id="toggle-icon" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+
+      <div class="mb-10 p-2 text-3xl font-bold text-blue-400 opacity-80">
+        <span id="logo-expanded" class="hidden lg:block">Vioma</span>
+        <span id="logo-collapsed" class="block lg:hidden">V</span>
+      </div>
+
+      <nav id="nav-links" class="flex flex-col space-y-4 w-full">
+      </nav>
+
+      <div class="mt-auto pt-6 w-full flex justify-center">
+        <a href="#"
+          class="nav-item flex items-center h-12 py-2 px-3 lg:px-6 text-white hover:bg-blue-600/30 transition duration-150 ease-in-out cursor-pointer rounded-r-full group">
+          <svg class="nav-icon w-6 h-6 transition-all duration-300 stroke-2 group-hover:text-blue-300" fill="none"
+            stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+            </path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z">
+            </path>
+          </svg>
+          <span
+            class="lg:inline hidden text-sm font-medium whitespace-nowrap opacity-100 transition-opacity duration-300">Settings</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-grow p-8 pt-10 transition-all duration-300 ml-20 lg:ml-64">
+
+      <h1 class="text-4xl font-bold text-white mb-8">PDF Summarizer — Fast & Humanized</h1>
+
+      <form id="pdfForm" enctype="multipart/form-data" class="flex flex-col space-y-4 mb-6">
+        <input type="file" id="pdfFile" name="file" accept="application/pdf" required
+          class="p-2 rounded bg-slate-900/70 border border-blue-600/50 text-white focus:outline-none">
+        <select id="mode" name="mode"
+          class="p-2 rounded bg-slate-900/70 border border-blue-600/50 text-white focus:outline-none">
+          <option value="short">Short</option>
+          <option value="medium">Medium</option>
+          <option value="long" selected>Long (detailed)</option>
+        </select>
+        <button type="submit"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded transition">Summarize</button>
+      </form>
+
+      <div id="status" class="mb-4 text-sky-200"></div>
+
+      <h2 class="text-2xl font-semibold mb-2">Summary</h2>
+      <div id="summaryBox" class="summary-box p-4 rounded-xl glass-sidebar border border-gray-700/50 shadow-xl">
+        <pre id="summaryText" style="white-space:pre-wrap;"></pre>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    const form = document.getElementById('pdfForm');
+    const status = document.getElementById('status');
+    const summaryTextEl = document.getElementById('summaryText');
+
+    async function typeText(el, text, msPerChar = 12) {
+      el.textContent = "";
+      for (let i = 0; i < text.length; i++) {
+        el.textContent += text[i];
+        await new Promise(r => setTimeout(r, msPerChar));
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      status.textContent = "Uploading PDF and preparing summary — this can take a few seconds...";
+      summaryTextEl.textContent = "";
+
+      const fileInput = document.getElementById('pdfFile');
+      const modeSelect = document.getElementById('mode');
+      const file = fileInput.files[0];
+      if (!file) return alert("Choose a PDF file first.");
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('mode', modeSelect.value);
+
+      try {
+        const resp = await fetch('/summarize', { method: 'POST', body: formData });
+        if (!resp.ok) {
+          const text = await resp.text();
+          throw new Error(text || 'Server error');
+        }
+        const summary = await resp.text();
+        status.textContent = "Summary ready — displaying...";
+        await typeText(summaryTextEl, summary, 6);
+        status.textContent = "Done.";
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Error: " + (err.message || err);
+        summaryTextEl.textContent = "";
+      }
+    });
+
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('main-content');
+    const logoExpanded = document.getElementById('logo-expanded');
+    const logoCollapsed = document.getElementById('logo-collapsed');
+    let isSidebarOpen = false;
+
+    const navItems = [
+      ['M3 12l2-2 4 4 2-2 4 4 2-2', 'Home', '/home'],
+      ['M19 19V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14l5-2 5 2 5-2 5 2z', 'Chat', '/chat/get'],
+      ['M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2', 'Draft idea', '/draft'],
+      ['M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z', 'Your work', '/work'],
+      ['M12 20a8 8 0 100-16 8 8 0 000 16zM12 12V6', 'Visualizations', '/graph'],
+      ['M6 4v16M18 4v16M6 8h12M6 16h12', 'Storyline', '/storyline'],
+    ];
+
+    // Sidebar Functions
+    function setNavTextVisibility(show) {
+      const navTextElements = sidebar.querySelectorAll('.nav-item span');
+      navTextElements.forEach(el => {
+        if (show) el.classList.remove('hidden');
+        else el.classList.add('hidden');
+      });
+    }
+
+    function updateSidebarState(open) {
+      if (open) {
+        sidebar.classList.remove('w-20');
+        sidebar.classList.add('w-64');
+        logoCollapsed.classList.add('hidden');
+        logoExpanded.classList.remove('hidden');
+        setNavTextVisibility(true);
+      } else {
+        sidebar.classList.remove('w-64');
+        sidebar.classList.add('w-20');
+        logoExpanded.classList.add('hidden');
+        logoCollapsed.classList.remove('hidden');
+        setNavTextVisibility(false);
+      }
+      isSidebarOpen = open;
+    }
+
+    function toggleSidebar() {
+      updateSidebarState(!isSidebarOpen);
+    }
+
+    // Generate Nav Links
+    function generateNavigationLinks() {
+      const navContainer = document.getElementById('nav-links');
+      navContainer.innerHTML = '';
+
+      navItems.forEach(([path, name, url]) => {
+        const item = document.createElement('a');
+        item.href = url;
+        item.className = 'nav-item flex items-center h-12 py-2 px-3 text-white hover:bg-blue-600/30 transition duration-150 ease-in-out cursor-pointer rounded-r-full group';
+
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute('class', 'nav-icon w-6 h-6 mr-0 lg:mr-4 transition-all duration-300 stroke-2 group-hover:text-blue-300');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('viewBox', '0 0 24 24');
+
+        const iconPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        iconPath.setAttribute('stroke-linecap', 'round');
+        iconPath.setAttribute('stroke-linejoin', 'round');
+        iconPath.setAttribute('d', path);
+
+        svg.appendChild(iconPath);
+        item.appendChild(svg);
+
+        const text = document.createElement('span');
+        text.textContent = name;
+        text.className = 'hidden text-sm font-medium whitespace-nowrap';
+        item.appendChild(text);
+
+        navContainer.appendChild(item);
+      });
+    }
+
+
+    // Init
+    document.addEventListener('DOMContentLoaded', () => {
+      generateNavigationLinks();
+      // Check screen width
+      if (window.innerWidth >= 1024) {
+        updateSidebarState(true); // Expanded on large screens
+      } else {
+        updateSidebarState(false); // Collapsed on small screens
+      }
+    });
+
+  </script>
+</body>
+
+</html>
