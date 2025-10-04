@@ -4,8 +4,7 @@ const { body, validationResult } = require('express-validator');
 const userModel = require('../models/user.model')
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
-
+const authMiddleware = require('../middlewares/auth');
 
 router.get('/login', (req, res) => {
     res.render('login');
@@ -26,15 +25,15 @@ router.post('/register',
             })
         }
 
-        res.redirect('/user/login');
-        // const { email, username, password } = req.body;
-        // const hashPassword = await bcrypt.hash(password, 10)
+        res.status(200).json({ message: 'Registered successfully', redirect: '/user/login' });
+        const { email, username, password } = req.body;
+        const hashPassword = await bcrypt.hash(password, 10)
 
-        // const newUser = await userModel.create({
-        //     email,
-        //     username,
-        //     password: hashPassword
-        // })
+        const newUser = await userModel.create({
+            email,
+            username,
+            password: hashPassword
+        })
 
         // res.json(newUser)
     })
@@ -80,16 +79,32 @@ router.post('/login',
             process.env.JWT_SECRET,
         )
 
-    
+
         res.cookie('token', token, {
             httpOnly: true,
             secure: false,  // ✅ must be false on localhost
             sameSite: 'lax', // works for redirects on same domain/port
             path: '/'
         });
-        res.redirect('/home');
+        res.status(200).json({ message: 'Login successful', redirect: '/' });
     })
 
+router.get('/me', (req, res) => {
+    const token = req.cookies.token;
+    if (!token) return res.json({ loggedIn: false });
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.json({ loggedIn: true, username: decoded.username });
+    } catch (err) {
+        res.json({ loggedIn: false });
+    }
+});
+
+router.post('/logout', (req, res) => {
+    res.clearCookie('token', { path: '/' });
+    res.json({ message: 'Logged out successfully' });
+});
 
 
 module.exports = router;

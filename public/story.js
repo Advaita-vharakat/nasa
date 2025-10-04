@@ -192,3 +192,53 @@ window.addEventListener('resize', () => {
     }
 });
 
+
+
+// ===== Video Gallery =====
+const videos = [
+    { title: 'Microgravity Effects', src: '/videos/video1.mp4', category: 'Biological' },
+    { title: 'Habitat Power Cycle', src: '/videos/video2.mp4', category: 'Engineering' },
+    { title: 'Radiation Shielding', src: '/videos/video3.mp4', category: 'Physics' },
+    // Add more video objects as needed
+];
+
+const gallery = document.getElementById('video-gallery');
+const modal = document.getElementById('video-modal');
+const modalVideo = document.getElementById('modal-video');
+const modalClose = document.getElementById('modal-close');
+
+function loadVideoGallery() {
+    gallery.innerHTML = '';
+    videos.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'video-card glass-sidebar p-4 rounded-xl shadow-xl';
+        card.innerHTML = `
+            <video src="${v.src}" class="w-full rounded-lg" muted></video>
+            <h3 class="mt-2 text-blue-200 font-semibold">${v.title}</h3>
+            <span class="inline-block mt-1 px-2 py-1 text-xs font-medium text-white bg-blue-700/50 rounded-full">${v.category}</span>
+        `;
+        card.onclick = () => openModal(v.src);
+        gallery.appendChild(card);
+    });
+}
+
+function openModal(src) {
+    modalVideo.src = src;
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    modalVideo.play();
+}
+
+function closeModal() {
+    modalVideo.pause();
+    modalVideo.currentTime = 0;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
+
+modalClose.addEventListener('click', closeModal);
+modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadVideoGallery();
+});

@@ -66,19 +66,27 @@
 
             <!-- Graph Dashboard Controls -->
             <section class="controls flex flex-wrap gap-4 justify-center mb-8">
-                <select id="graph-type" class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white">
-                    <option value="bar">Bar Chart</option>
-                    <option value="line">Line Chart</option>
-                    <option value="pie">Pie Chart</option>
-                </select>
-                <input id="graph-title" placeholder="Graph Title" type="text"
-                    class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white">
-                <button onclick="generateGraph()">Generate Graph</button>
+                <div class="flex gap-2">
+                    <input id="graph-search" placeholder="Search Graphs..." type="text"
+                        class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white w-60">
+                    <button id="search-graph-btn" class="p-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white">
+                        🔍 Search
+                    </button>
+                </div>
+
+                <div class="flex gap-2">
+                    <input id="graph-description" placeholder="Describe Graph" type="text"
+                        class="p-2 rounded-lg bg-slate-900/70 border border-blue-600/50 text-white w-60">
+                    <button id="generate-graph-btn" class="p-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white">
+                        Generate Graph
+                    </button>
+                </div>
             </section>
+
 
             <!-- Graphs Display Area -->
             <section id="graphsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Graph canvases will be injected here -->
+                <!-- Graphs fetched from backend will appear here -->
             </section>
 
         </main>
