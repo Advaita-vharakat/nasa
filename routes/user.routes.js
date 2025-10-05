@@ -86,7 +86,7 @@ router.post('/login',
             sameSite: 'lax', // works for redirects on same domain/port
             path: '/'
         });
-        res.status(200).json({ message: 'Login successful', redirect: '/' });
+        res.status(200).json({ message: 'Login successful', redirect: '/home' });
     })
 
 router.get('/me', (req, res) => {

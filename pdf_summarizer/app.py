@@ -24,6 +24,10 @@ async def draft():
 async def storyline():
     return RedirectResponse(url=f"{NODE_URL}/storyline")
 
+@app.get("/graph")
+async def storyline():
+    return RedirectResponse(url=f"{NODE_URL}/graph")
+
 @app.get("/home")
 async def home_proxy():
     return RedirectResponse(url=f"{NODE_URL}/home")
